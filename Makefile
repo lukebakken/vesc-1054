@@ -2,8 +2,14 @@
 
 RABBITMQ_DOCKER_TAG ?= 3-management
 
+$(CURDIR)/testapp/target/playgroundrabbit-0.0.1-SNAPSHOT.jar:
+	cd testapp && mvn compile && mvn package
+
+testapp: $(CURDIR)/testapp/target/playgroundrabbit-0.0.1-SNAPSHOT.jar
+
 clean: perms
 	git clean -xffd
+	cd testapp && git clean -xffd
 
 down:
 	docker compose down
