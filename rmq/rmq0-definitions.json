@@ -1,0 +1,79 @@
+{
+  "rabbit_version": "3.11.4",
+  "rabbitmq_version": "3.11.4",
+  "product_name": "RabbitMQ",
+  "product_version": "3.11.4",
+  "users": [
+    {
+      "name": "guest",
+      "password_hash": "mJvVJWtWJcvsmiibqlMXIhnlfQokqwv17+OmCOH/ccXuxDKK",
+      "hashing_algorithm": "rabbit_password_hashing_sha256",
+      "tags": [
+        "administrator"
+      ],
+      "limits": {}
+    }
+  ],
+  "vhosts": [
+    {
+      "name": "/"
+    }
+  ],
+  "permissions": [
+    {
+      "user": "guest",
+      "vhost": "/",
+      "configure": ".*",
+      "write": ".*",
+      "read": ".*"
+    }
+  ],
+  "topic_permissions": [],
+  "parameters": [
+    {
+      "value": {
+        "ack-mode": "on-confirm",
+        "consumer-tag": "vesc-1054-rmq0",
+        "prefetch-count": 8,
+        "queue": "vesc-1054",
+        "reconnect-delay": 5,
+        "trust-user-id": false,
+        "uri": "amqp://rmq1"
+      },
+      "vhost": "/",
+      "component": "federation-upstream",
+      "name": "rmq1-upstream"
+    }
+  ],
+  "global_parameters": [
+    {
+      "name": "internal_cluster_id",
+      "value": "rabbitmq-cluster-id-dya1pO_nFLt9NuK0q_lHOw"
+    }
+  ],
+  "policies": [
+    {
+      "vhost": "/",
+      "name": "vesc-1054-federation",
+      "pattern": "^vesc-1054",
+      "apply-to": "queues",
+      "definition": {
+        "federation-upstream": "rmq1-upstream"
+      },
+      "priority": 0
+    }
+  ],
+  "queues": [
+    {
+      "name": "vesc-1054",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    }
+  ],
+  "exchanges": [],
+  "bindings": []
+}
