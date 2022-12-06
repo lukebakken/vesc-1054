@@ -1,0 +1,3 @@
+[submodule "testapp"]
+	path = testapp
+	url = git@github.com:lukebakken/rabbitmq-sharding-plugin.git
