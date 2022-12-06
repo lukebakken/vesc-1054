@@ -3,6 +3,7 @@
 RABBITMQ_DOCKER_TAG ?= 3-management
 
 vesc-1054:
+	docker compose stop perf-test-rmq0-rmq1-producer perf-test-rmq0-rmq1-consumer
 	# Note: pattern has $$ because GNU makefiles require that $ be escaped
 	$(CURDIR)/bin/rabbitmqadmin --host=localhost --port=15672 declare policy name=vesc-1054-0-null pattern='^vesc-1054-0$$' definition='{"federation-upstream":"undefined"}' priority=10 apply-to=queues
 	$(CURDIR)/bin/rabbitmqadmin --host=localhost --port=15673 declare policy name=vesc-1054-0-null pattern='^vesc-1054-0$$' definition='{"federation-upstream":"undefined"}' priority=10 apply-to=queues
