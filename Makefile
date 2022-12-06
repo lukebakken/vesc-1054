@@ -13,6 +13,7 @@ clean: perms
 
 down:
 	docker compose down
+	docker compose rm --force
 
 up: rmq-perms
 	docker compose build --build-arg RABBITMQ_DOCKER_TAG=$(RABBITMQ_DOCKER_TAG)
