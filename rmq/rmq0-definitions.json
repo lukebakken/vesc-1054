@@ -33,16 +33,30 @@
     {
       "value": {
         "ack-mode": "on-confirm",
-        "consumer-tag": "vesc-1054-rmq0",
+        "consumer-tag": "vesc-1054-rmq0-0",
         "prefetch-count": 8,
-        "queue": "vesc-1054",
+        "queue": "vesc-1054-0",
         "reconnect-delay": 5,
         "trust-user-id": false,
         "uri": "amqp://rmq1"
       },
       "vhost": "/",
       "component": "federation-upstream",
-      "name": "rmq1-upstream"
+      "name": "rmq1-0-upstream"
+    },
+    {
+      "value": {
+        "ack-mode": "on-confirm",
+        "consumer-tag": "vesc-1054-rmq0-1",
+        "prefetch-count": 8,
+        "queue": "vesc-1054-1",
+        "reconnect-delay": 5,
+        "trust-user-id": false,
+        "uri": "amqp://rmq1"
+      },
+      "vhost": "/",
+      "component": "federation-upstream",
+      "name": "rmq1-1-upstream"
     }
   ],
   "global_parameters": [
@@ -54,18 +68,37 @@
   "policies": [
     {
       "vhost": "/",
-      "name": "vesc-1054-federation",
-      "pattern": "^vesc-1054",
+      "name": "vesc-1054-0-federation",
+      "pattern": "^vesc-1054-0$",
       "apply-to": "queues",
       "definition": {
-        "federation-upstream": "rmq1-upstream"
+        "federation-upstream": "rmq1-0-upstream"
+      },
+      "priority": 0
+    },
+    {
+      "vhost": "/",
+      "name": "vesc-1054-1-federation",
+      "pattern": "^vesc-1054-1$",
+      "apply-to": "queues",
+      "definition": {
+        "federation-upstream": "rmq1-1-upstream"
       },
       "priority": 0
     }
   ],
   "queues": [
     {
-      "name": "vesc-1054",
+      "name": "vesc-1054-0",
+      "vhost": "/",
+      "durable": true,
+      "auto_delete": false,
+      "arguments": {
+        "x-queue-type": "classic"
+      }
+    },
+    {
+      "name": "vesc-1054-1",
       "vhost": "/",
       "durable": true,
       "auto_delete": false,

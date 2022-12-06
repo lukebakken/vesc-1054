@@ -7,6 +7,7 @@ services:
     environment:
       - LOG=debug
     volumes:
+      - ./rmq/rmq0-definitions.json:/etc/rabbitmq/definitions.json:ro
       - ./data/rmq0:/var/lib/rabbitmq/mnesia
       - ./log/rmq0:/var/log/rabbitmq
     ports:
@@ -18,22 +19,73 @@ services:
     environment:
       - LOG=debug
     volumes:
+      - ./rmq/rmq1-definitions.json:/etc/rabbitmq/definitions.json:ro
       - ./data/rmq1:/var/lib/rabbitmq/mnesia
       - ./log/rmq1:/var/log/rabbitmq
     ports:
       # HOST:CONTAINER
       - 15673:15672
-  perf-test-0:
+  perf-test-rmq0-rmq1-producer:
     image: pivotalrabbitmq/perf-test:latest
     command:
       - --uri=amqp://rmq0
       - --servers-startup-timeout=10
       - --rate=1
-      - --producers=6
-      - --consumers=6
+      - --producers=1
+      - --consumers=0
       - --flag=persistent
       - --flag=mandatory
       - --confirm=4
+      - --predeclared
+      - --queue=vesc-1054-0
+    depends_on:
+      - rmq0
+    restart: on-failure
+  perf-test-rmq0-rmq1-consumer:
+    image: pivotalrabbitmq/perf-test:latest
+    command:
+      - --uri=amqp://rmq1
+      - --servers-startup-timeout=10
+      - --rate=1
+      - --producers=0
+      - --consumers=1
+      - --flag=persistent
+      - --flag=mandatory
+      - --confirm=4
+      - --predeclared
+      - --queue=vesc-1054-0
+    depends_on:
+      - rmq1
+    restart: on-failure
+  perf-test-rmq1-rmq0-producer:
+    image: pivotalrabbitmq/perf-test:latest
+    command:
+      - --uri=amqp://rmq1
+      - --servers-startup-timeout=10
+      - --rate=1
+      - --producers=1
+      - --consumers=0
+      - --flag=persistent
+      - --flag=mandatory
+      - --confirm=4
+      - --predeclared
+      - --queue=vesc-1054-1
+    depends_on:
+      - rmq1
+    restart: on-failure
+  perf-test-rmq1-rmq0-consumer:
+    image: pivotalrabbitmq/perf-test:latest
+    command:
+      - --uri=amqp://rmq0
+      - --servers-startup-timeout=10
+      - --rate=1
+      - --producers=0
+      - --consumers=1
+      - --flag=persistent
+      - --flag=mandatory
+      - --confirm=4
+      - --predeclared
+      - --queue=vesc-1054-1
     depends_on:
       - rmq0
     restart: on-failure
